@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>M71_AspNetCore_Configuration</RootNamespace>
+    <UserSecretsId>78e6bb6e-baf0-4d31-a45e-6f65eb0cbba5</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings1.ini" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings1.ini" />
+  </ItemGroup>
+
+</Project>
