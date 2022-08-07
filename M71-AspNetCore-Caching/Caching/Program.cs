@@ -3,26 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddMemoryCache();
 
-//builder.Services.AddDistributedMemoryCache();
-
-
-// *** Install-Package Microsoft.Extensions.Caching.SqlServer -Version 6.0.7
-// *** dotnet sql-cache create "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DistCache;Integrated Security=True;" dbo TestCache
-//builder.Services.AddDistributedSqlServerCache(options =>
-//{
-//    options.ConnectionString = builder.Configuration.GetConnectionString(
-//        "DistCache_ConnectionString");
-//    options.SchemaName = "dbo";
-//    options.TableName = "TestCache";
-//});
-
-// *** Install-Package StackExchange.Redis -Version 2.6.48
-//builder.Services.AddStackExchangeRedisCache(options =>
-//{
-//    options.Configuration = builder.Configuration.GetConnectionString("MyRedisConStr");
-//    options.InstanceName = "SampleInstance";
-//});
 
 var app = builder.Build();
 

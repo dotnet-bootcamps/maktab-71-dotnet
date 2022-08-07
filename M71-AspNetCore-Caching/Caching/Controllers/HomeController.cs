@@ -2,30 +2,62 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Caching.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IDistributedCache _distributedCache;
+        private readonly IMemoryCache _memoryCache;
 
-        public HomeController(ILogger<HomeController> logger, IDistributedCache distributedCache)
+
+        public HomeController(ILogger<HomeController> logger, 
+            IMemoryCache memoryCache)
         {
             _logger = logger;
-            _distributedCache = distributedCache;
+            _memoryCache = memoryCache;
         }
 
-        public IActionResult Index()
+        public string Remove()
         {
-            //_distributedCache.Set("TotalVisit",null);
-
-            //var totalVisit = _distributedCache.Get("TotalVisit");
-
-            //_distributedCache.Remove("TotalVisit");
-
-            return View();
+             _memoryCache.Remove("Categories");
+             return "removed succesfully";
         }
+
+        public string Get()
+        {
+            return _memoryCache.Get<int>("Categories")
+                .ToString();
+        }
+
+        public string Set()
+        {
+            //_memoryCache.Set("Categories", 5, DateTimeOffset.Now.AddSeconds(20));
+
+            // در این حالت بعد از 300 ثانیه کش حذف می شود
+            _memoryCache.Set("Categories", 5, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(300),
+            });
+
+            // بار هر بار فراخوانی 10 ثانیه کش تمدید می شود
+            _memoryCache.Set("Categories", 5, new MemoryCacheEntryOptions
+            {
+                SlidingExpiration = TimeSpan.FromSeconds(10)
+            });
+
+            // زمان انقضا 300 ثانیه بعد است ولی اگر تا 10 ثانیه کسی از این 
+            // آیتم استفاده نکند به صورت خودکار حذف می شود
+            _memoryCache.Set("Categories", 5, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(300),
+                SlidingExpiration = TimeSpan.FromSeconds(10)
+            });
+
+            return "it's ok";
+        }
+
 
         public IActionResult Privacy()
         {
